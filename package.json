@@ -1,0 +1,29 @@
+{
+  "name": "mintos",
+  "version": "0.0.1",
+  "description": "Mintos investments tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Martko/mintos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Martko/mintos/issues"
+  },
+  "homepage": "https://github.com/Martko/mintos#readme",
+  "dependencies": {
+    "moment": "^2.24.0",
+    "mysql2": "^1.6.5",
+    "puppeteer": "^1.14.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0"
+  }
+}
