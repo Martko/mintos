@@ -1,4 +1,4 @@
-export MINTOS_HEADLESS=true
+export HEADLESS_BROWSER=true
 export MINTOS_USERNAME=
 export MINTOS_PASSWORD=
 export MYSQL_HOST=localhost

@@ -1,26 +1,41 @@
 const puppeteer = require('puppeteer');
 const date = require('./date');
 const db = require('./db');
+const pageHelper = require('./page-helper');
+const validation = require('./validation');
 
-const validateSetup = async () => {
-  if (!process.env.MINTOS_USERNAME || !process.env.MINTOS_PASSWORD) {
-    console.error('Couldn\'t find username and/or password setup');
-    process.exit(1);
+/**
+ * Calculates total interest sum
+ * @param {} jsonData
+ */
+const getTotalInterestSum = (jsonData) => {
+  const statementEntries = jsonData.data.summary.statementEntryGroups;
+  const balanceStatementEntryTypes = [
+    '17', // Interest received
+    '46', // Interest income on rebuy
+    '117', // Refer a friend bonus
+  ];
+
+  let interests = 0;
+
+  for (let i = 0; i < balanceStatementEntryTypes.length; i += 1) {
+    const entryType = balanceStatementEntryTypes[i];
+
+    if (statementEntries.hasOwnProperty(entryType)) {
+      interests += parseFloat(statementEntries[entryType]);
+    }
   }
+
+  return interests;
 };
 
-const login = async (page) => {
-  await page.goto('https://www.mintos.com/en/login');
-  await page.type('input[name="_username"]', process.env.MINTOS_USERNAME);
-  await page.type('input[name="_password"]', process.env.MINTOS_PASSWORD);
-  await page.click('button.account-login-btn');
-  await page.waitForSelector('.overview-box');
-};
-
+/**
+ * Sets up browser and does the initial configuration
+ */
 const setupBrowser = async () => {
   const browser = await puppeteer.launch({
     // eslint-disable-next-line eqeqeq
-    headless: process.env.MINTOS_HEADLESS == 'true',
+    headless: process.env.HEADLESS_BROWSER == 'true',
   });
   const page = await browser.newPage();
 
@@ -33,42 +48,26 @@ const setupBrowser = async () => {
 };
 
 (async () => {
-  validateSetup();
+  validation.check();
 
+  const periodFromElement = '#period-from';
+  const periodToElement = '#period-to';
   const { browser, page } = await setupBrowser();
 
-  await login(page);
-
+  await pageHelper.login(page);
   await page.goto('https://www.mintos.com/en/account-statement/');
 
-  let selector = '#period-from';
-  await page.evaluate((sel) => { document.querySelector(sel).value = ''; }, selector);
-  await page.type('#period-from', date.twoDaysAgo);
+  pageHelper.clearInput(page, periodFromElement);
+  await page.type(periodFromElement, date.yesterday);
 
-  selector = '#period-to';
-  await page.evaluate((sel) => { document.querySelector(sel).value = ''; }, selector);
-  await page.type('#period-to', date.yesterday);
+  pageHelper.clearInput(page, periodToElement);
+  await page.type(periodToElement, date.yesterday);
   await page.click('#filter-button');
 
-  const INTEREST_RECIEVED_SELECTOR = '#overview-results > table > tbody > tr:nth-child(5) > td.in > span';
-  const INTEREST_RECEIVED_ON_REBUY = '#overview-results > table > tbody > tr:nth-child(7) > td.in > span';
-
-  await page.waitForSelector(INTEREST_RECEIVED_ON_REBUY);
-
-  const interestAmount = await page.evaluate((sel) => {
-    const interestSelector = document.querySelector(sel);
-    return interestSelector ? parseFloat(interestSelector.innerHTML) : null;
-  }, INTEREST_RECIEVED_SELECTOR);
-
-  const interestAmountOnRebuy = await page.evaluate((sel) => {
-    const interestSelector = document.querySelector(sel);
-    return interestSelector ? parseFloat(interestSelector.innerHTML) : null;
-  }, INTEREST_RECEIVED_ON_REBUY);
-
-  const totalInterests = interestAmount + interestAmountOnRebuy;
+  const response = await page.waitForResponse('https://www.mintos.com/en/account-statement/list');
+  const totalInterests = getTotalInterestSum(await response.json());
 
   await browser.close();
-
   await db.insert({
     source: 'mintos',
     month: date.yesterdayMonth,
@@ -76,6 +75,5 @@ const setupBrowser = async () => {
     interest_amount: totalInterests,
     net_profit: totalInterests,
   });
-
   process.exit(0);
 })();
