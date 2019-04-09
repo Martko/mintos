@@ -22,6 +22,7 @@ const interests = require('./interests');
 
   await browser.close();
   await db.insert({
+    date: date.yesterdayYmd,
     source: 'mintos',
     total: totalInterests,
     net: totalInterests,
