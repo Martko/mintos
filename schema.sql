@@ -35,17 +35,6 @@ CREATE TABLE `daily_interests` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `daily_interests` WRITE;
-/*!40000 ALTER TABLE `daily_interests` DISABLE KEYS */;
-
-INSERT INTO `daily_interests` (`id`, `date`, `source`, `total`, `loss`, `net`)
-VALUES
-	(8,'2019-02-09','mintos',0.138058,0,0.138058),
-	(9,'2019-04-09','mintos',0.441592,0,0.441592);
-
-/*!40000 ALTER TABLE `daily_interests` ENABLE KEYS */;
-UNLOCK TABLES;
-
 
 # Dump of table monthly_interests
 # ------------------------------------------------------------
@@ -61,8 +50,6 @@ CREATE TABLE `monthly_interests` (
    `net` DOUBLE NULL DEFAULT NULL
 ) ENGINE=MyISAM;
 
-
-
 # Dump of table yearly_interests
 # ------------------------------------------------------------
 
@@ -75,10 +62,6 @@ CREATE TABLE `yearly_interests` (
    `loss` DOUBLE NULL DEFAULT NULL,
    `net` DOUBLE NULL DEFAULT NULL
 ) ENGINE=MyISAM;
-
-
-
-
 
 # Replace placeholder table for monthly_interests with correct view syntax
 # ------------------------------------------------------------
