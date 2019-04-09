@@ -70,10 +70,8 @@ const setupBrowser = async () => {
   await browser.close();
   await db.insert({
     source: 'mintos',
-    month: date.yesterdayMonth,
-    year: date.yesterdayYear,
-    interest_amount: totalInterests,
-    net_profit: totalInterests,
+    total: totalInterests,
+    net: totalInterests,
   });
   process.exit(0);
 })();

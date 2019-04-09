@@ -10,7 +10,7 @@ const getConnection = async () => mysql.createConnection({
 const insert = async (object) => {
   const connection = await getConnection();
   const [rows] = await connection.execute(
-    'INSERT INTO `interests` (source, month, year, interest_amount, net_profit) VALUES (?,?,?,?,?)',
+    'INSERT INTO `daily_interests` (date, source, total, net) VALUES (CURRENT_DATE(),?,?,?)',
     Object.values(object),
   );
 

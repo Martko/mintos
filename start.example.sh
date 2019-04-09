@@ -6,4 +6,4 @@ export MYSQL_USERNAME=
 export MYSQL_PASSWORD=
 export MYSQL_DATABASE=
 
-node index.js
+node ./src/index.js
