@@ -8,18 +8,13 @@ const interests = require('./interests');
 (async () => {
   validation.check();
 
-  const periodFromElement = '#period-from';
-  const periodToElement = '#period-to';
   const { browser, page } = await browserHelper.setup();
 
   await pageHelper.login(page);
   await page.goto('https://www.mintos.com/en/account-statement/');
 
-  pageHelper.clearInput(page, periodFromElement);
-  await page.type(periodFromElement, date.yesterday);
-
-  pageHelper.clearInput(page, periodToElement);
-  await page.type(periodToElement, date.yesterday);
+  await pageHelper.fillDateFrom(page, date.yesterday);
+  await pageHelper.fillDateTo(page, date.yesterday);
   await page.click('#filter-button');
 
   const response = await page.waitForResponse('https://www.mintos.com/en/account-statement/list');
