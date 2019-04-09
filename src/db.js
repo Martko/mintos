@@ -1,5 +1,8 @@
 const mysql = require('mysql2/promise');
 
+/**
+ * Create new MySQL connection
+ */
 const getConnection = async () => mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USERNAME,
@@ -7,10 +10,14 @@ const getConnection = async () => mysql.createConnection({
   database: process.env.MYSQL_DATABASE,
 });
 
+/**
+ * Insert data safely to DB
+ * @param {*} object
+ */
 const insert = async (object) => {
   const connection = await getConnection();
   const [rows] = await connection.execute(
-    'INSERT INTO `daily_interests` (date, source, total, net) VALUES (CURRENT_DATE(),?,?,?)',
+    'INSERT INTO `daily_interests` (date, source, total, net) VALUES (SUBDATE(CURRENT_DATE, 1),?,?,?)',
     Object.values(object),
   );
 
