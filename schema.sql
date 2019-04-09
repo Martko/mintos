@@ -68,7 +68,7 @@ CREATE TABLE `yearly_interests` (
 
 DROP TABLE `monthly_interests`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `monthly_interests`
+CREATE VIEW `monthly_interests`
 AS SELECT
    `daily_interests`.`source` AS `source`,month(`daily_interests`.`date`) AS `month`,year(`daily_interests`.`date`) AS `year`,sum(`daily_interests`.`total`) AS `total`,sum(`daily_interests`.`loss`) AS `loss`,sum(`daily_interests`.`net`) AS `net`
 FROM `daily_interests` group by `daily_interests`.`source`,month(`daily_interests`.`date`),year(`daily_interests`.`date`);
@@ -79,7 +79,7 @@ FROM `daily_interests` group by `daily_interests`.`source`,month(`daily_interest
 
 DROP TABLE `yearly_interests`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `yearly_interests`
+CREATE VIEW `yearly_interests`
 AS SELECT
    `daily_interests`.`source` AS `source`,year(`daily_interests`.`date`) AS `year`,sum(`daily_interests`.`total`) AS `total`,sum(`daily_interests`.`loss`) AS `loss`,sum(`daily_interests`.`net`) AS `net`
 FROM `daily_interests` group by `daily_interests`.`source`,year(`daily_interests`.`date`);
