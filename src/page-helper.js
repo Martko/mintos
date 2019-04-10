@@ -11,14 +11,14 @@ const clearInput = async (page, selector) => {
 const fillDateFrom = async (page, dateValue) => {
   const periodFromElement = '#period-from';
 
-  clearInput(page, periodFromElement);
+  await clearInput(page, periodFromElement);
   await page.type(periodFromElement, dateValue);
 };
 
 const fillDateTo = async (page, dateValue) => {
   const periodToElement = '#period-to';
 
-  clearInput(page, periodToElement);
+  await clearInput(page, periodToElement);
   await page.type(periodToElement, dateValue);
 };
 
