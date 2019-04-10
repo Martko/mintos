@@ -23,6 +23,16 @@ const fillDateTo = async (page, dateValue) => {
 };
 
 /**
+ *
+ * @param {Page} page
+ * @param {string} selector
+ */
+const getElementContent = async (page, selector) => page.evaluate(
+  el => el.textContent,
+  await page.$(selector),
+);
+
+/**
  * Log in via web interface
  * @param {Page} page
  */
@@ -38,4 +48,5 @@ module.exports = {
   fillDateFrom,
   fillDateTo,
   login,
+  getElementContent,
 };

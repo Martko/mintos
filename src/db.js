@@ -14,8 +14,7 @@ const getConnection = async () => mysql.createConnection({
  * Insert data safely to DB
  * @param {*} object
  */
-const insert = async (object) => {
-  const connection = await getConnection();
+const insertDailyInterest = async (connection, object) => {
   const [rows] = await connection.execute(
     'INSERT INTO `daily_interests` (date, source, total, net) VALUES (?,?,?,?)',
     Object.values(object),
@@ -24,4 +23,17 @@ const insert = async (object) => {
   return rows.affectedRows;
 };
 
-module.exports = { insert };
+const insertPortfolioValue = async (connection, object) => {
+  const [rows] = await connection.execute(
+    'INSERT INTO `portfolio_values` (date, source, value) VALUES (?,?,?)',
+    Object.values(object),
+  );
+
+  return rows.affectedRows;
+};
+
+module.exports = {
+  getConnection,
+  insertDailyInterest,
+  insertPortfolioValue,
+};
