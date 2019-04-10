@@ -4,6 +4,11 @@
 */
 module.exports.getTotalSum = (jsonData) => {
   const statementEntries = jsonData.data.summary.statementEntryGroups;
+
+  if (!statementEntries) {
+    return 0;
+  }
+
   const balanceStatementEntryTypes = [
     '17', // Interest received
     '46', // Interest income on rebuy
