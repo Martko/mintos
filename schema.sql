@@ -8,6 +8,14 @@ CREATE TABLE `daily_interests` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `portfolio_values` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `source` varchar(50) NOT NULL DEFAULT '',
+  `value` float NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
 CREATE VIEW `monthly_interests`
 AS SELECT
    `daily_interests`.`source` AS `source`,month(`daily_interests`.`date`) AS `month`,year(`daily_interests`.`date`) AS `year`,sum(`daily_interests`.`total`) AS `total`,sum(`daily_interests`.`loss`) AS `loss`,sum(`daily_interests`.`net`) AS `net`
