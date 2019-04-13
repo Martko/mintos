@@ -33,11 +33,19 @@ const getElementContent = async (page, selector) => page.evaluate(
 );
 
 /**
+ * Get monetary value from a page
+ * @param {Page} page
+ * @param {string} selector
+ */
+const getMonetaryValue = async (page, selector) => (await getElementContent(page, selector)).replace(/€|\s/g, '');
+
+/**
  * Log in via web interface
  * @param {Page} page
  */
 const login = async (page) => {
   await page.goto('https://www.mintos.com/en/login');
+  await page.waitForSelector('input[name="_username"]');
   await page.type('input[name="_username"]', process.env.MINTOS_USERNAME);
   await page.type('input[name="_password"]', process.env.MINTOS_PASSWORD);
   await page.click('button.account-login-btn');
@@ -49,4 +57,5 @@ module.exports = {
   fillDateTo,
   login,
   getElementContent,
+  getMonetaryValue,
 };

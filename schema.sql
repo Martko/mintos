@@ -1,18 +1,24 @@
 CREATE TABLE `daily_interests` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   `source` varchar(50) DEFAULT NULL,
   `total` decimal(13,4) NOT NULL DEFAULT '0.0000',
   `loss` decimal(13,4) NOT NULL DEFAULT '0.0000',
   `net` decimal(13,4) NOT NULL DEFAULT '0.0000',
-  PRIMARY KEY (`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `portfolio_values` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   `source` varchar(50) NOT NULL DEFAULT '',
-  `value` float NOT NULL,
-  PRIMARY KEY (`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `value` decimal(13,4) NOT NULL,
+  `initial_investment` decimal(13,4) NOT NULL DEFAULT '0.0000',
+  `profit` decimal(13,4) NOT NULL DEFAULT '0.0000',
+  `cash` decimal(13,4) NOT NULL DEFAULT '0.0000',
+  `added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE VIEW `monthly_interests`
 AS SELECT

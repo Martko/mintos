@@ -4,6 +4,7 @@ const pageHelper = require('./page-helper');
 const validation = require('./validation');
 const browserHelper = require('./browser-helper');
 const interests = require('./interests');
+const selectors = require('./selectors');
 
 (async () => {
   validation.check();
@@ -12,10 +13,9 @@ const interests = require('./interests');
 
   await pageHelper.login(page);
 
-  const portfolioValue = (await pageHelper.getElementContent(
-    page,
-    'li.overview-box div.value',
-  )).replace(/€|\s/g, '');
+  const portfolioValue = await pageHelper.getMonetaryValue(page, selectors.portfolioValue);
+  const totalProfit = await pageHelper.getMonetaryValue(page, selectors.totalInterest);
+  const availableCash = await pageHelper.getMonetaryValue(page, selectors.availableFunds);
 
   await page.goto('https://www.mintos.com/en/account-statement/');
   await pageHelper.fillDateFrom(page, date.yesterday);
@@ -32,6 +32,9 @@ const interests = require('./interests');
     date: date.yesterdayYmd,
     source: 'mintos',
     value: portfolioValue,
+    initial_investment: portfolioValue - totalProfit, // this logic has to be changed once money is taken out
+    profit: totalProfit,
+    cash: availableCash,
   });
 
   await db.insertDailyInterest(connection, {

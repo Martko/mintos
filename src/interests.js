@@ -13,6 +13,8 @@ module.exports.getTotalSum = (jsonData) => {
     '17', // Interest received
     '46', // Interest income on rebuy
     '117', // Refer a friend bonus
+    '53', // Discount/Premium on secondary market transactions
+    '25', // Late fees received
   ];
 
   let interests = 0;

@@ -7,6 +7,28 @@ const interests = require('./interests');
 
 moment.locale('et');
 
+const handleResponseReceived = async (connection, nextDate, totalInterests) => {
+  await db.insertDailyInterest(connection, {
+    date: nextDate.format('YYYY-MM-DD'),
+    source: 'mintos',
+    total: totalInterests,
+    net: totalInterests,
+  });
+};
+
+const handleAccountStatementResponse = async (connection, page, nextDate) => {
+  await page.waitForResponse('https://www.mintos.com/en/account-statement/list', { timeout: 3000 }).then(async (response) => {
+    const totalInterests = interests.getTotalSum(await response.json());
+
+    await handleResponseReceived(connection, nextDate, totalInterests);
+  }).catch(async (err) => {
+    console.log(`getAccountStatementResponse failed: ${err}`);
+
+    await page.click('#filter-button');
+    await handleAccountStatementResponse(connection, page, nextDate);
+  });
+};
+
 (async () => {
   validation.check();
 
@@ -32,15 +54,7 @@ moment.locale('et');
     await page.click('h1');
     await page.click('#filter-button');
 
-    const response = await page.waitForResponse('https://www.mintos.com/en/account-statement/list');
-    const totalInterests = interests.getTotalSum(await response.json());
-
-    await db.insertDailyInterest(connection, {
-      date: nextDate.format('YYYY-MM-DD'),
-      source: 'mintos',
-      total: totalInterests,
-      net: totalInterests,
-    });
+    await handleAccountStatementResponse(connection, page, nextDate);
 
     nextDate = moment(nextDate).add(1, 'day');
   }
