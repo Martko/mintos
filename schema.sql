@@ -10,7 +10,9 @@ CREATE TABLE `daily_interests` (
 CREATE TABLE `portfolio_values` (
   `date` date NOT NULL,
   `source` varchar(50) NOT NULL DEFAULT '',
-  `value` float NOT NULL,
+  `value` decimal(13,4) NOT NULL,
+  `initial_investment` decimal(13,4) NOT NULL DEFAULT '0.0000',
+  `added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
