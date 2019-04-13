@@ -1,9 +1,9 @@
 CREATE TABLE `daily_interests` (
   `date` date NOT NULL,
   `source` varchar(50) DEFAULT NULL,
-  `total` float NOT NULL DEFAULT '0',
-  `loss` float NOT NULL DEFAULT '0',
-  `net` float NOT NULL DEFAULT '0',
+  `total` decimal(13,4) NOT NULL DEFAULT '0.0000',
+  `loss` decimal(13,4) NOT NULL DEFAULT '0.0000',
+  `net` decimal(13,4) NOT NULL DEFAULT '0.0000',
   PRIMARY KEY (`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
