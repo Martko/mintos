@@ -25,7 +25,7 @@ const insertDailyInterest = async (connection, object) => {
 
 const insertPortfolioValue = async (connection, object) => {
   const [rows] = await connection.execute(
-    'INSERT INTO `portfolio_values` (date, source, value) VALUES (?,?,?)',
+    'INSERT INTO `portfolio_values` (date, source, value, initial_investment, profit, cash) VALUES (?,?,?,?,?,?)',
     Object.values(object),
   );
 
