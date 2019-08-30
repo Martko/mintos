@@ -45,6 +45,7 @@ const getMonetaryValue = async (page, selector) => (await getElementContent(page
  */
 const login = async (page) => {
   await page.goto('https://www.mintos.com/en/login');
+  await page.waitForSelector('input[name="_username"]');
   await page.type('input[name="_username"]', process.env.MINTOS_USERNAME);
   await page.type('input[name="_password"]', process.env.MINTOS_PASSWORD);
   await page.click('button.account-login-btn');
