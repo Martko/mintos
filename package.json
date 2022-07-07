@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/Martko/mintos#readme",
   "dependencies": {
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mysql2": "^1.7.0",
     "puppeteer": "^1.14.0"
   },
